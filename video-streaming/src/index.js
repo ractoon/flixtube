@@ -10,7 +10,7 @@ if (!process.env.PORT) {
 const PORT = process.env.PORT;
 
 app.get('/video', (req, res) => {
-  const path = './videos/SampleVideo_1280x720_1mb.mp4';
+  const path = './SampleVideo_1280x720_1mb.mp4';
   fs.stat(path, (err, stats) => {
     if (err) {
       console.error('Could not load video', err.message);
@@ -32,5 +32,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`)
+  console.log(`Video streaming microservice online at port ${PORT}`);
 });
