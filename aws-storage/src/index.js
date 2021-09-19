@@ -4,7 +4,7 @@ const S3 = require('aws-sdk/clients/s3');
 const app = express();
 
 if (!process.env.PORT) {
-    throw new Error("Please specify the port number for the HTTP server with the environment variable PORT.");
+  throw new Error("Please specify the port number for the HTTP server with the environment variable PORT.");
 }
 
 if (!process.env.AWS_ACCESS_KEY_ID) {
@@ -12,7 +12,7 @@ if (!process.env.AWS_ACCESS_KEY_ID) {
 }
 
 if (!process.env.AWS_SECRET_ACCESS_KEY) {
-    throw new Error("Please specify the secret access key to an AWS S3 account in environment variable AWS_SECRET_ACCESS_KEY.");
+  throw new Error("Please specify the secret access key to an AWS S3 account in environment variable AWS_SECRET_ACCESS_KEY.");
 }
 
 if (!process.env.S3_BUCKET_NAME) {
@@ -22,7 +22,7 @@ if (!process.env.S3_BUCKET_NAME) {
 const PORT = process.env.PORT;
 const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME;
 
-app.get("/video", (req, res) => {
+app.get('/video', (req, res) => {
     const videoPath = `videos/${req.query.path}`;
     console.log(`Streaming video from path ${videoPath}`);
 
@@ -35,12 +35,14 @@ app.get("/video", (req, res) => {
         return;
       }
     }).on('httpHeaders', function (statusCode, headers) {
-      res.set('Content-Length', headers['content-length']);
-      res.set('Content-Type', headers['content-type']);
+      res.writeHead(200, {
+        "Content-Length": headers['content-length'],
+        "Content-Type": headers['content-type'],
+      });
+
       this.response.httpResponse.createUnbufferedStream()
           .pipe(res);
-    })
-    .send();
+    });
 });
 
 app.listen(PORT, () => {
