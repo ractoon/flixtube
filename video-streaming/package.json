@@ -1,5 +1,5 @@
 {
-  "name": "flixtube",
+  "name": "video-streaming",
   "version": "1.0.0",
   "description": "Video streaming microservice",
   "main": "./src/index.js",
