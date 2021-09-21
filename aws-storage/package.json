@@ -1,5 +1,5 @@
 {
-  "name": "flixtube",
+  "name": "aws-storage",
   "version": "1.0.0",
   "description": "Video storage microservice",
   "main": "./src/index.js",

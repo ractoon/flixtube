@@ -12,8 +12,12 @@ services:
     image: aws-storage
     build:
       context: ./aws-storage
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
     container_name: video-storage
+    volumes:
+      - /tmp/aws-storage/npm-cache:/root/.npm:z
+      - ./aws-storage/src:/usr/src/app/src:z
+      - ./aws-storage/videos:/usr/src/app/videos:z
     ports:
      - "4001:80"
     environment:
