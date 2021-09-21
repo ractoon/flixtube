@@ -35,6 +35,32 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+function sendViewedMessage(videoPath) {
+  const req = http.request(
+      'http://history/viewed',
+      {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+      }
+  );
+
+  req.on("close", () => {
+      console.log("Sent 'viewed' message to history microservice.");
+  });
+
+  req.on("error", (err) => {
+      console.error("Failed to send 'viewed' message!");
+      console.error(err && err.stack || err);
+  });
+
+  req.write(JSON.stringify({
+    videoPath: videoPath
+  }));
+  req.end();
+}
+
 function main() {
   return mongodb.MongoClient.connect(DBHOST)
       .then(client => {
@@ -67,6 +93,7 @@ function main() {
                 );
 
                 req.pipe(forwardRequest);
+                sendViewedMessage(videoRecord.videoPath);
               })
               .catch(err => {
                 console.error("Database query failed.");
