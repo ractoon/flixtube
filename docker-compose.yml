@@ -10,6 +10,17 @@ services:
     volumes:
       - ./dbdata:/data/db
 
+  rabbit:
+    image: rabbitmq:management
+    container_name: rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    expose:
+      - "5672"
+      - "15672"
+    restart: always
+
   aws-storage:
     image: aws-storage
     build:
@@ -48,8 +59,10 @@ services:
       - DBNAME=video-streaming
       - VIDEO_STORAGE_HOST=video-storage
       - VIDEO_STORAGE_PORT=80
+      - RABBIT=amqp://guest:guest@rabbit:5672
     depends_on:
       - db
+      - rabbit
     restart: "no"
 
   history:
@@ -68,6 +81,8 @@ services:
       - NODE_ENV=development
       - DBHOST=mongodb://db:27017
       - DBNAME=history
+      - RABBIT=amqp://guest:guest@rabbit:5672
     depends_on:
       - db
+      - rabbit
     restart: "no"
